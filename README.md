@@ -34,8 +34,14 @@ To run the example code:
 python main.py
 ```
 
+## Próximos Pasos
+* descargar  nuevo dataset (preguntar ramon)
+* más modelos
+* mas epochs?
+
+
 ## Contributors
-Martina vita
+Martina Vitagliano
 Guillem Batlle
 Carla Martinez Vidal
 Marcel Izquierdo
