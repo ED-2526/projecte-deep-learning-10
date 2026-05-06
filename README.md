@@ -1,11 +1,28 @@
-# XN-breed-dogs 
-Write here a short summary about your project. The text must include a short introduction and the targeted goals
+# XN-breed-dogs: Clasificación de Razas de Perros 🐶
 
-## Code structure
-You must create as many folders as you consider. You can use the proposed structure or replace it by the one in the base code that you use as starting point. Do not forget to add Markdown files as needed to explain well the code and how to use it.
+Este proyecto tiene como objetivo desarrollar un modelo de Deep Learning capaz de clasificar correctamente diferentes razas de perros a partir de imágenes. El proyecto ha sido desarrollado como parte de la asignatura de **Xarxes Neuronals i Aprenentatge Profund**.
 
-## Example Code
-The given code is a simple CNN example training on the MNIST dataset. It shows how to set up the [Weights & Biases](https://wandb.ai/site)  package to monitor how your network is learning, or not.
+## 📁 Estructura del Código
+
+El repositorio está organizado de la siguiente manera para separar la lógica de entrenamiento, los modelos y las utilidades:
+
+* `models/`: Contiene las definiciones de las arquitecturas de las redes neuronales utilizadas.
+* `utils/`: Scripts auxiliares para la carga de datos (dataloaders), preprocesamiento de imágenes y otras funciones de ayuda.
+* `test/`: Scripts y recursos destinados exclusivamente a la evaluación del modelo.
+* `main.py` / `main2.py`: Puntos de entrada principales para ejecutar flujos completos (entrenamiento y validación).
+* `train.py`: Script dedicado específicamente al bucle de entrenamiento del modelo.
+* `test.py`: Script para ejecutar inferencias y calcular métricas de rendimiento sobre el conjunto de test.
+* `test_trained_model.ipynb`: Jupyter Notebook interactivo ideal para visualizar predicciones, analizar errores y probar el modelo ya entrenado de forma visual.
+* `environment.yml`: Archivo de configuración con todas las dependencias necesarias para ejecutar el proyecto.
+
+## 🛠️ Instalación y Configuración
+
+Antes de ejecutar el código, es necesario crear un entorno virtual local utilizando Conda. El archivo `environment.yml` incluye todas las dependencias requeridas (PyTorch, librerías de visión artificial, etc.).
+
+1. Clona el repositorio y navega hasta la carpeta:
+   ```bash
+   git clone [https://github.com/ED-2526/projecte-deep-learning-10.git](https://github.com/ED-2526/projecte-deep-learning-10.git)
+   cd projecte-deep-learning-10
 
 Before running the code you have to create a local environment with conda and activate it. The provided [environment.yml](https://github.com/DCC-UAB/XNAP-Project/environment.yml) file has all the required dependencies. Run the following command: ``conda env create --file environment.yml `` to create a conda environment with all the required dependencies and then activate it:
 ```
@@ -17,10 +34,11 @@ To run the example code:
 python main.py
 ```
 
-
-
 ## Contributors
-Write here the name and UAB mail of the group members
+Martina vita
+Guillem Batlle
+Carla Martinez Vidal
+
 
 Xarxes Neuronals i Aprenentatge Profund
 Grau dÉnginyeria de Dades, 
