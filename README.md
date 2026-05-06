@@ -38,7 +38,7 @@ python main.py
 Martina vita
 Guillem Batlle
 Carla Martinez Vidal
-
+Marcel Izquierdo
 
 Xarxes Neuronals i Aprenentatge Profund
 Grau dÉnginyeria de Dades, 
