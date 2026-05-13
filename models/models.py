@@ -1,40 +1,36 @@
+import torch
 import torch.nn as nn
 from torchvision import models
 
 
-def get_model(architecture: str, num_classes: int) -> nn.Module:
-    if architecture == "resnet50":
-        model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V2)
-        _freeze_backbone(model)
-        model.fc = nn.Linear(model.fc.in_features, num_classes)
+class DualHeadModel(nn.Module):
+    def __init__(self, num_classes: int, num_groups: int, dropout: float = 0.0, pretrained: bool = True):
+        super().__init__()
+        base = models.efficientnet_v2_s(
+            weights=models.EfficientNet_V2_S_Weights.IMAGENET1K_V1 if pretrained else None
+        )
+        for param in base.parameters():
+            param.requires_grad = False
 
-    elif architecture == "resnet18":
-        model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
-        _freeze_backbone(model)
-        model.fc = nn.Linear(model.fc.in_features, num_classes)
+        in_features   = base.classifier[1].in_features  # 1280
+        self.features = base.features
+        self.avgpool  = base.avgpool
+        self.dropout  = nn.Dropout(p=dropout)
+        self.fc         = nn.Linear(in_features, num_classes)
+        self.group_head = nn.Linear(in_features, num_groups)
 
-    elif architecture == "efficientnet_b0":
-        model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
-        _freeze_backbone(model)
-        in_features = model.classifier[1].in_features
-        model.classifier[1] = nn.Linear(in_features, num_classes)
-
-    else:
-        raise ValueError(f"Unknown architecture: {architecture}")
-
-    return model
-
-
-def unfreeze_top_layers(model: nn.Module, architecture: str) -> None:
-    """Unfreeze the last convolutional block so it can be fine-tuned."""
-    if architecture in ("resnet50", "resnet18"):
-        for param in model.layer4.parameters():
-            param.requires_grad = True
-    elif architecture == "efficientnet_b0":
-        for param in model.features[-3:].parameters():
-            param.requires_grad = True
+    def forward(self, x: torch.Tensor):
+        x = self.features(x)
+        x = self.avgpool(x)
+        x = x.flatten(1)
+        x = self.dropout(x)
+        return self.fc(x), self.group_head(x)
 
 
-def _freeze_backbone(model: nn.Module) -> None:
-    for param in model.parameters():
-        param.requires_grad = False
+def get_model(num_classes: int, num_groups: int, dropout: float = 0.0, pretrained: bool = True) -> DualHeadModel:
+    return DualHeadModel(num_classes, num_groups, dropout=dropout, pretrained=pretrained)
+
+
+def unfreeze_top_layers(model: DualHeadModel, num_blocks: int = 3) -> None:
+    for param in model.features[-num_blocks:].parameters():
+        param.requires_grad = True
